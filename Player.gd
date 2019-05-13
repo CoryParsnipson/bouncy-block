@@ -3,15 +3,17 @@ extends KinematicBody2D
 export var velocity = Vector2()
 export var acceleration = Vector2()
 
-export var jump_accel = 800
+export var jump_accel = 150
 export var gravity = Vector2(0, 30)
 
 export var disable_input = false
 
-export var max_vel = 0.0
-export var min_vel = 0.0
-
 var bounds = Rect2()
+
+var max_vel = 0.0
+var min_vel = 0.0
+
+var is_jumping = false
 
 func _ready():
 	max_vel = -jump_accel * 10
@@ -21,11 +23,21 @@ func _ready():
 	
 	$AnimatedSprite.play()
 
+func is_jump_just_pressed():
+	return Input.is_action_just_pressed("ui_accept") or Input.is_action_just_pressed("ui_select")
+	
+func is_jump_pressed():
+	return Input.is_action_pressed("ui_accept") or Input.is_action_pressed("ui_select")
+
 func _process(delta):
 	if !disable_input:
-		if Input.is_action_just_pressed("ui_accept") or Input.is_action_just_pressed("ui_select"):
+		if is_jump_just_pressed():
 			velocity.y = 0
 			acceleration.y -= jump_accel
+			
+			# start flap timer (used for variable height jumps)
+			is_jumping = true
+			$FlapTimer.start()
 			
 			# cut off the current animation and restart flap animation
 			$AnimatedSprite.stop()
@@ -35,7 +47,8 @@ func _process(delta):
 			$AnimatedSprite.play()
 	
 func _physics_process(delta):
-	acceleration /= 2
+	if !is_jumping or !is_jump_pressed():
+		acceleration /= 2
 	
 	velocity = velocity + acceleration + gravity
 	position += velocity * delta
@@ -50,3 +63,6 @@ func _physics_process(delta):
 
 func _on_animation_finished():
 	$AnimatedSprite.play("neutral")
+	
+func _on_reached_jump_apex():
+	is_jumping = false

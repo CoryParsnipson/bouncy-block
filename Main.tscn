@@ -8,5 +8,6 @@
 
 position = Vector2( 200, 300 )
 _sections_unfolded = [ "Transform" ]
+jump_accel = 150
 
 
