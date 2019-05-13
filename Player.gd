@@ -6,6 +6,7 @@ export var acceleration = Vector2()
 export var jump_accel = 150
 export var gravity = Vector2(0, 30)
 
+export var disable_physics = false
 export var disable_input = false
 
 var bounds = Rect2()
@@ -47,6 +48,9 @@ func _process(delta):
 			$AnimatedSprite.play()
 	
 func _physics_process(delta):
+	if disable_physics:
+		return
+	
 	if !is_jumping or !is_jump_pressed():
 		acceleration /= 2
 	
