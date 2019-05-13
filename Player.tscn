@@ -1,0 +1,72 @@
+[gd_scene load_steps=11 format=2]
+
+[ext_resource path="res://Player.gd" type="Script" id=1]
+[ext_resource path="res://sprite/blocky-flap-1.png" type="Texture" id=2]
+[ext_resource path="res://sprite/blocky-flap-2.png" type="Texture" id=3]
+[ext_resource path="res://sprite/blocky-flap-3.png" type="Texture" id=4]
+[ext_resource path="res://sprite/blocky-flap-4.png" type="Texture" id=5]
+[ext_resource path="res://sprite/blocky-flap-5.png" type="Texture" id=6]
+[ext_resource path="res://sprite/blocky-neutral-1.png" type="Texture" id=7]
+[ext_resource path="res://sprite/blocky-neutral-2.png" type="Texture" id=8]
+
+[sub_resource type="SpriteFrames" id=1]
+
+animations = [ {
+"frames": [ ExtResource( 2 ), ExtResource( 3 ), ExtResource( 4 ), ExtResource( 4 ), ExtResource( 4 ), ExtResource( 5 ), ExtResource( 6 ), ExtResource( 6 ), ExtResource( 6 ) ],
+"loop": false,
+"name": "flap",
+"speed": 15.0
+}, {
+"frames": [ ExtResource( 7 ), ExtResource( 8 ) ],
+"loop": true,
+"name": "neutral",
+"speed": 2.0
+} ]
+_sections_unfolded = [ "Resource" ]
+
+[sub_resource type="CircleShape2D" id=2]
+
+custom_solver_bias = 0.0
+radius = 18.0634
+
+[node name="Player" type="KinematicBody2D" index="0"]
+
+input_pickable = false
+collision_layer = 1
+collision_mask = 1
+collision/safe_margin = 0.08
+script = ExtResource( 1 )
+__meta__ = {
+"_edit_group_": true
+}
+velocity = Vector2( 0, 0 )
+acceleration = Vector2( 0, 0 )
+jump_accel = 800
+gravity = Vector2( 0, 30 )
+disable_input = false
+max_vel = 0.0
+min_vel = 0.0
+
+[node name="AnimatedSprite" type="AnimatedSprite" parent="." index="0"]
+
+scale = Vector2( 0.15, 0.15 )
+frames = SubResource( 1 )
+animation = "neutral"
+_sections_unfolded = [ "Transform" ]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." index="1"]
+
+shape = SubResource( 2 )
+
+[node name="FlapTimer" type="Timer" parent="." index="2"]
+
+process_mode = 1
+wait_time = 0.1
+one_shot = false
+autostart = false
+
+[connection signal="animation_finished" from="AnimatedSprite" to="." method="_on_animation_finished"]
+
+[connection signal="timeout" from="FlapTimer" to="." method="_on_flap_done"]
+
+
