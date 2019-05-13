@@ -27,9 +27,12 @@ func _process(delta):
 			velocity.y = 0
 			acceleration.y -= jump_accel
 			
-			$AnimatedSprite.play("flap")
-			disable_input = true
-			$FlapTimer.start()
+			# cut off the current animation and restart flap animation
+			$AnimatedSprite.stop()
+			$AnimatedSprite.animation = "flap"
+			$AnimatedSprite.frame = 0
+			
+			$AnimatedSprite.play()
 	
 func _physics_process(delta):
 	acceleration /= 2
@@ -44,9 +47,6 @@ func _physics_process(delta):
 	if position.y == bounds.position.y:
 		acceleration.y = 0
 		velocity.y = 0
-
-func _on_flap_done():
-	disable_input = false
 
 func _on_animation_finished():
 	$AnimatedSprite.play("neutral")

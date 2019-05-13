@@ -58,15 +58,6 @@ _sections_unfolded = [ "Transform" ]
 
 shape = SubResource( 2 )
 
-[node name="FlapTimer" type="Timer" parent="." index="2"]
-
-process_mode = 1
-wait_time = 0.1
-one_shot = false
-autostart = false
-
 [connection signal="animation_finished" from="AnimatedSprite" to="." method="_on_animation_finished"]
-
-[connection signal="timeout" from="FlapTimer" to="." method="_on_flap_done"]
 
 
