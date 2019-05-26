@@ -3,7 +3,7 @@ extends KinematicBody2D
 export var velocity = Vector2()
 export var acceleration = Vector2()
 
-export var jump_accel = 150
+export var jump_accel = 120
 export var gravity = Vector2(0, 30)
 
 export var disable_physics = false

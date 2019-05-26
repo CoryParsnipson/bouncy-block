@@ -29,7 +29,7 @@ _sections_unfolded = [ "Resource" ]
 custom_solver_bias = 0.0
 radius = 18.0634
 
-[node name="Player" type="KinematicBody2D"]
+[node name="Player" type="KinematicBody2D" index="0"]
 
 input_pickable = false
 collision_layer = 1
@@ -41,7 +41,7 @@ __meta__ = {
 }
 velocity = Vector2( 0, 0 )
 acceleration = Vector2( 0, 0 )
-jump_accel = 150
+jump_accel = 120
 gravity = Vector2( 0, 30 )
 disable_physics = false
 disable_input = false
