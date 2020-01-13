@@ -5,28 +5,15 @@
 [ext_resource path="res://Barrier.tscn" type="PackedScene" id=3]
 
 [node name="Game" type="Node"]
-
 script = ExtResource( 1 )
-barrier_speed = 7
 
-[node name="Player" parent="." index="0" instance=ExtResource( 2 )]
-
+[node name="Player" parent="." instance=ExtResource( 2 )]
 position = Vector2( 200, 300 )
-_sections_unfolded = [ "Transform" ]
-jump_accel = 120
 
-[node name="Barrier" parent="." index="1" instance=ExtResource( 3 )]
-
+[node name="Barrier" parent="." instance=ExtResource( 3 )]
 position = Vector2( -30.2545, 287.039 )
-_sections_unfolded = [ "Transform" ]
 
-[node name="BarrierTimer" type="Timer" parent="." index="2"]
-
-process_mode = 1
+[node name="BarrierTimer" type="Timer" parent="."]
 wait_time = 3.0
 one_shot = true
-autostart = false
-
 [connection signal="timeout" from="BarrierTimer" to="." method="_on_BarrierTimer_timeout"]
-
-
