@@ -1,8 +1,17 @@
-[gd_scene load_steps=4 format=2]
+[gd_scene load_steps=7 format=2]
 
 [ext_resource path="res://Main.gd" type="Script" id=1]
 [ext_resource path="res://Player.tscn" type="PackedScene" id=2]
 [ext_resource path="res://Barrier.tscn" type="PackedScene" id=3]
+[ext_resource path="res://fonts/retro.ttf" type="DynamicFontData" id=4]
+
+[sub_resource type="DynamicFont" id=1]
+size = 28
+font_data = ExtResource( 4 )
+
+[sub_resource type="DynamicFont" id=2]
+size = 28
+font_data = ExtResource( 4 )
 
 [node name="Game" type="Node"]
 script = ExtResource( 1 )
@@ -10,10 +19,31 @@ script = ExtResource( 1 )
 [node name="Player" parent="." instance=ExtResource( 2 )]
 position = Vector2( 200, 300 )
 
-[node name="Barrier" parent="." instance=ExtResource( 3 )]
-position = Vector2( -30.2545, 287.039 )
+[node name="BarrierUpper" parent="." instance=ExtResource( 3 )]
+position = Vector2( -6.67346, 199.296 )
+rotation = -3.14159
+
+[node name="BarrierLower" parent="." instance=ExtResource( 3 )]
+position = Vector2( -6.69627, 407.776 )
 
 [node name="BarrierTimer" type="Timer" parent="."]
 wait_time = 3.0
 one_shot = true
+
+[node name="LevelLabel" type="Label" parent="."]
+margin_left = 16.5695
+margin_top = 17.3495
+margin_right = 166.569
+margin_bottom = 62.3495
+custom_fonts/font = SubResource( 1 )
+text = "Score:"
+
+[node name="LevelCounter" type="Label" parent="."]
+margin_left = 195.831
+margin_top = 16.6287
+margin_right = 235.831
+margin_bottom = 54.6287
+custom_fonts/font = SubResource( 2 )
+text = "0"
+align = 1
 [connection signal="timeout" from="BarrierTimer" to="." method="_on_BarrierTimer_timeout"]
