@@ -20,11 +20,10 @@ script = ExtResource( 1 )
 position = Vector2( 200, 300 )
 
 [node name="BarrierUpper" parent="." instance=ExtResource( 3 )]
-position = Vector2( -6.67346, 199.296 )
-rotation = -3.14159
+rotation = 3.14159
 
 [node name="BarrierLower" parent="." instance=ExtResource( 3 )]
-position = Vector2( -6.69627, 407.776 )
+position = Vector2( -1.29236, 597.068 )
 
 [node name="BarrierTimer" type="Timer" parent="."]
 wait_time = 3.0

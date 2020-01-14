@@ -2,13 +2,13 @@ extends Node
 
 export var score = 0
 export var level = 0
-export var to_next_level = 2
+export var to_next_level = 1
 export var barrier_speed = 7
 export var barrier_offset_min = 0
 export var barrier_offset_max = 0
 export var barrier_gap_radius = 120
 
-export var barrier_speed_max = 25
+export var barrier_speed_max = 17
 export var barrier_wait_time_min = 1.5
 export var barrier_gap_radius_min = 70
 
@@ -24,7 +24,9 @@ func _ready():
 	barrier_offset_min = int(bounds.position.y) + barrier_gap_radius
 	barrier_offset_max = int(bounds.end.y) - barrier_gap_radius
 	
-	# TODO: move barriers beyond viewport edge
+	# make the upper barrier sprite mirrored to align the face
+	$BarrierUpper/AnimatedSprite.flip_h = true
+	
 	reset()
 
 func _process(delta):
@@ -39,10 +41,10 @@ func _physics_process(delta):
 	previous_barrier_pos_x = $BarrierUpper.position.x
 	
 	# TODO: how to programmtically calculate when this node falls off the screen?
-	if $BarrierUpper.position.x > bounds.position.x - 14:
+	if $BarrierUpper.position.x >= bounds.position.x - $BarrierUpper/CollisionShape2D.shape.extents.x - 10:
 		$BarrierUpper.position.x -= barrier_speed
 	
-	if $BarrierLower.position.x > bounds.position.x - 14:
+	if $BarrierLower.position.x >= bounds.position.x - $BarrierLower/CollisionShape2D.shape.extents.x - 10:
 		$BarrierLower.position.x -= barrier_speed
 		
 	if previous_barrier_pos_x >= $Player.position.x \
@@ -56,6 +58,9 @@ func reset():
 	$Player.position.x = 200
 	$Player.position.y = bounds.size.y / 2.0
 	
+	$BarrierUpper.position.x = bounds.position.x - $BarrierUpper/CollisionShape2D.shape.extents.x - 10
+	$BarrierLower.position.x = bounds.position.x - $BarrierLower/CollisionShape2D.shape.extents.x - 10
+	
 	game_started = false
 	$Player.disable_physics = true
 	
@@ -65,8 +70,8 @@ func start_game():
 	$BarrierTimer.start()
 	
 func send_barrier():
-	$BarrierUpper.position.x = bounds.end.x + 14
-	$BarrierLower.position.x = bounds.end.x + 14
+	$BarrierUpper.position.x = bounds.end.x + $BarrierUpper/CollisionShape2D.shape.extents.x - 10
+	$BarrierLower.position.x = bounds.end.x + $BarrierLower/CollisionShape2D.shape.extents.x - 10
 	
 	var barrier_offset = randi() % (barrier_offset_max - barrier_offset_min) + barrier_offset_min
 	
