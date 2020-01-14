@@ -29,7 +29,7 @@ position = Vector2( -1.29236, 597.068 )
 wait_time = 3.0
 one_shot = true
 
-[node name="LevelLabel" type="Label" parent="."]
+[node name="ScoreLabel" type="Label" parent="."]
 margin_left = 16.5695
 margin_top = 17.3495
 margin_right = 166.569
@@ -37,7 +37,7 @@ margin_bottom = 62.3495
 custom_fonts/font = SubResource( 1 )
 text = "Score:"
 
-[node name="LevelCounter" type="Label" parent="."]
+[node name="ScoreCounter" type="Label" parent="."]
 margin_left = 195.831
 margin_top = 16.6287
 margin_right = 235.831
@@ -45,4 +45,6 @@ margin_bottom = 54.6287
 custom_fonts/font = SubResource( 2 )
 text = "0"
 align = 1
+[connection signal="body_entered" from="BarrierUpper" to="." method="_on_barrier_collision"]
+[connection signal="body_entered" from="BarrierLower" to="." method="_on_barrier_collision"]
 [connection signal="timeout" from="BarrierTimer" to="." method="_on_BarrierTimer_timeout"]
