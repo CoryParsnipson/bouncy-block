@@ -1,16 +1,19 @@
 extends Node
 
+export var barrier_speed_min = 7
+export var barrier_speed_max = 13
+export var barrier_wait_time_min = 1.5
+export var barrier_wait_time_max = 3
+export var barrier_gap_radius_min = 70
+export var barrier_gap_radius_max = 120
+
 export var score = 0
 export var level = 0
 export var to_next_level = 1
-export var barrier_speed = 7
+export var barrier_speed = 0
 export var barrier_offset_min = 0
 export var barrier_offset_max = 0
-export var barrier_gap_radius = 120
-
-export var barrier_speed_max = 13
-export var barrier_wait_time_min = 1.5
-export var barrier_gap_radius_min = 70
+export var barrier_gap_radius = 0
 
 var bounds
 var game_started = false
@@ -20,9 +23,6 @@ var active_barriers = Array()
 
 func _ready():
 	bounds = get_viewport().get_visible_rect()
-	
-	barrier_offset_min = int(bounds.position.y) + barrier_gap_radius
-	barrier_offset_max = int(bounds.end.y) - barrier_gap_radius
 	
 	# make the upper barrier sprite mirrored to align the face
 	$BarrierUpper/AnimatedSprite.flip_h = true
@@ -56,6 +56,13 @@ func reset():
 	
 	$Player.position.x = 200
 	$Player.position.y = bounds.size.y / 2.0
+	
+	$BarrierTimer.wait_time = barrier_wait_time_max
+	barrier_speed = barrier_speed_min
+	barrier_gap_radius = barrier_gap_radius_max
+	
+	barrier_offset_min = int(bounds.position.y) + barrier_gap_radius
+	barrier_offset_max = int(bounds.end.y) - barrier_gap_radius
 	
 	$BarrierUpper.position.x = bounds.position.x - $BarrierUpper/CollisionShape2D.shape.extents.x - 10
 	$BarrierLower.position.x = bounds.position.x - $BarrierLower/CollisionShape2D.shape.extents.x - 10
