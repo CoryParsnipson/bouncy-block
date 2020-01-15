@@ -126,3 +126,7 @@ func _on_BarrierTimer_timeout():
 
 func _on_barrier_collision(body):
 	game_over()
+
+
+func _on_floor_collision(body):
+	game_over()
