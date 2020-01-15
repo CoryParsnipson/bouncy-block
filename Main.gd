@@ -6,6 +6,8 @@ export var barrier_wait_time_min = 1.5
 export var barrier_wait_time_max = 3
 export var barrier_gap_radius_min = 70
 export var barrier_gap_radius_max = 120
+export var barrier_min_buffer = 100
+export var barrier_max_buffer = 100
 
 export var score = 0
 export var level = 0
@@ -59,10 +61,8 @@ func reset():
 	
 	$BarrierTimer.wait_time = barrier_wait_time_max
 	barrier_speed = barrier_speed_min
-	barrier_gap_radius = barrier_gap_radius_max
 	
-	barrier_offset_min = int(bounds.position.y) + barrier_gap_radius
-	barrier_offset_max = int(bounds.end.y) - barrier_gap_radius
+	set_barrier_gap_radius(barrier_gap_radius_max)
 	
 	$BarrierUpper.position.x = bounds.position.x - $BarrierUpper/CollisionShape2D.shape.extents.x - 10
 	$BarrierLower.position.x = bounds.position.x - $BarrierLower/CollisionShape2D.shape.extents.x - 10
@@ -95,6 +95,11 @@ func set_score(new_score):
 	score = new_score
 	$ScoreCounter.text = str(score)
 	
+func set_barrier_gap_radius(new_radius):
+	barrier_gap_radius = max(new_radius, barrier_gap_radius_min)
+	barrier_offset_min = int(bounds.position.y) + barrier_gap_radius + barrier_min_buffer
+	barrier_offset_max = int(bounds.end.y) - barrier_gap_radius - barrier_max_buffer
+	
 func send_barrier():
 	$BarrierUpper.position.x = bounds.end.x + $BarrierUpper/CollisionShape2D.shape.extents.x - 10
 	$BarrierLower.position.x = bounds.end.x + $BarrierLower/CollisionShape2D.shape.extents.x - 10
@@ -114,10 +119,7 @@ func _on_BarrierTimer_timeout():
 		
 		$BarrierTimer.wait_time = max($BarrierTimer.wait_time - 0.02, barrier_wait_time_min)
 		barrier_speed = min(barrier_speed + 1, barrier_speed_max)
-		barrier_gap_radius = max(barrier_gap_radius - 5, barrier_gap_radius_min)
-		
-		barrier_offset_min = int(bounds.position.y) + barrier_gap_radius
-		barrier_offset_max = int(bounds.end.y) - barrier_gap_radius
+		set_barrier_gap_radius(barrier_gap_radius - 5)
 	
 	$BarrierTimer.start()
 

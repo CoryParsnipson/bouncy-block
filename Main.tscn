@@ -1,4 +1,4 @@
-[gd_scene load_steps=7 format=2]
+[gd_scene load_steps=8 format=2]
 
 [ext_resource path="res://Main.gd" type="Script" id=1]
 [ext_resource path="res://Player.tscn" type="PackedScene" id=2]
@@ -12,6 +12,9 @@ font_data = ExtResource( 4 )
 [sub_resource type="DynamicFont" id=2]
 size = 28
 font_data = ExtResource( 4 )
+
+[sub_resource type="RectangleShape2D" id=3]
+extents = Vector2( 517.483, 23.5903 )
 
 [node name="Game" type="Node"]
 script = ExtResource( 1 )
@@ -45,6 +48,18 @@ margin_bottom = 54.6287
 custom_fonts/font = SubResource( 2 )
 text = "0"
 align = 1
+
+[node name="Area2D" type="Area2D" parent="."]
+position = Vector2( -3.33081, 581.745 )
+
+[node name="Polygon2D" type="Polygon2D" parent="Area2D"]
+position = Vector2( -0.814514, -6.10352e-05 )
+scale = Vector2( 1.00398, 0.846319 )
+polygon = PoolVector2Array( 0, 0, 0, 53, 1024, 52.9999, 1024, 0 )
+
+[node name="Floor" type="CollisionShape2D" parent="Area2D"]
+position = Vector2( 513.508, 23.0025 )
+shape = SubResource( 3 )
 [connection signal="body_entered" from="BarrierUpper" to="." method="_on_barrier_collision"]
 [connection signal="body_entered" from="BarrierLower" to="." method="_on_barrier_collision"]
 [connection signal="timeout" from="BarrierTimer" to="." method="_on_BarrierTimer_timeout"]
