@@ -18,6 +18,7 @@ export var barrier_offset_max = 0
 export var barrier_gap_radius = 0
 
 var bounds
+var input_disabled = false
 var game_started = false
 var previous_barrier_pos_x
 
@@ -31,11 +32,13 @@ func _ready():
 	
 	reset()
 
+
 func _process(delta):
-	if !game_started:
-		if $Player.is_jump_pressed():
+	if !game_started and !input_disabled:
+		if Input.is_action_pressed("ui_accept") or Input.is_action_pressed("ui_select"):
 			start_game()
-			
+
+
 func _physics_process(delta):
 	if !game_started:
 		return
@@ -53,11 +56,15 @@ func _physics_process(delta):
 		and $BarrierUpper.position.x <= $Player.position.x:
 		set_score(score + 1)
 
+
 func reset():
 	randomize()
 	
 	$Player.position.x = 200
 	$Player.position.y = bounds.size.y / 2.0
+	
+	$Player.velocity = Vector2(0, 0)
+	$Player.acceleration = Vector2(0, 0)
 	
 	$BarrierTimer.wait_time = barrier_wait_time_max
 	barrier_speed = barrier_speed_min
@@ -70,36 +77,44 @@ func reset():
 	set_score(0)
 	level = 0
 	
+	$NotificationLabel.text = ""
+	
 	game_started = false
 	$Player.disable_physics = true
-	
+	$Player.disable_input = true
+
+
 func start_game():
 	reset()
-	
-	# TODO: add 3 second countdown here before starting
 	
 	game_started = true
 	$Player.disable_physics = false
 	$Player.disable_input = false
 	$BarrierTimer.start()
-	
+
+
 func game_over():
-	# TODO: add timer so that if user presses space immediately, it waits a minimum of the timer timeout  before
-	# starting a new game
+	input_disabled = true
 	game_started = false
 	$Player.disable_physics = true
 	$Player.disable_input = true
 	$BarrierTimer.stop()
 	
+	$NotificationLabel.text = "GAME OVER\n\nPress Space to try again"
+	$GameOverTimer.start();
+
+
 func set_score(new_score):
 	score = new_score
 	$ScoreCounter.text = str(score)
-	
+
+
 func set_barrier_gap_radius(new_radius):
 	barrier_gap_radius = max(new_radius, barrier_gap_radius_min)
 	barrier_offset_min = int(bounds.position.y) + barrier_gap_radius + barrier_min_buffer
 	barrier_offset_max = int(bounds.end.y) - barrier_gap_radius - barrier_max_buffer
-	
+
+
 func send_barrier():
 	$BarrierUpper.position.x = bounds.end.x + $BarrierUpper/CollisionShape2D.shape.extents.x - 10
 	$BarrierLower.position.x = bounds.end.x + $BarrierLower/CollisionShape2D.shape.extents.x - 10
@@ -108,8 +123,7 @@ func send_barrier():
 	
 	$BarrierUpper.position.y = barrier_offset - barrier_gap_radius
 	$BarrierLower.position.y = barrier_offset + barrier_gap_radius
-	
-	#active_barriers.push(barrier)
+
 
 func _on_BarrierTimer_timeout():
 	send_barrier()
@@ -130,3 +144,7 @@ func _on_barrier_collision(body):
 
 func _on_floor_collision(body):
 	game_over()
+
+
+func enable_input():
+	input_disabled = false
