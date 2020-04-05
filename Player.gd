@@ -40,6 +40,12 @@ func _process(delta):
 			is_jumping = true
 			$FlapTimer.start()
 			
+			# play flap sound
+			if randi() % 2:
+				$FlapSound1.play(0)
+			else:
+				$FlapSound2.play(0)
+			
 			# cut off the current animation and restart flap animation
 			$AnimatedSprite.stop()
 			$AnimatedSprite.animation = "flap"

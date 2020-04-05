@@ -90,6 +90,7 @@ func start_game():
 	game_started = true
 	$Player.disable_physics = false
 	$Player.disable_input = false
+	$Player.visible = true
 	$BarrierTimer.start()
 
 
@@ -98,10 +99,38 @@ func game_over():
 	game_started = false
 	$Player.disable_physics = true
 	$Player.disable_input = true
+	$Player.visible = false
 	$BarrierTimer.stop()
 	
-	$NotificationLabel.text = "GAME OVER\n\nPress Space to try again"
+	$DeathStartTimer.start();
 	$GameOverTimer.start();
+
+
+func die():
+	$DeathSound.play(0)
+	
+	# death animation
+	$DeathPop.visible = true
+	$DeathPop.position.x = $Player.position.x - 45
+	$DeathPop.position.y = $Player.position.y - 45
+	
+	$DeathAnimationTimer.start()
+
+
+func update_death_animation():
+	move_death_pop($DeathPop/DeathPop1, deg2rad(0))
+	move_death_pop($DeathPop/DeathPop2, deg2rad(45))
+	move_death_pop($DeathPop/DeathPop3, deg2rad(90))
+	move_death_pop($DeathPop/DeathPop4, deg2rad(135))
+	move_death_pop($DeathPop/DeathPop5, deg2rad(180))
+	move_death_pop($DeathPop/DeathPop6, deg2rad(225))
+	move_death_pop($DeathPop/DeathPop7, deg2rad(270))
+	move_death_pop($DeathPop/DeathPop8, deg2rad(315))
+
+
+func move_death_pop(pop, angle):
+	pop.position.x += cos(angle) * 50
+	pop.position.y += sin(angle) * 50
 
 
 func set_score(new_score):
@@ -146,5 +175,25 @@ func _on_floor_collision(body):
 	game_over()
 
 
-func enable_input():
+func game_over_end():
+	$DeathPop.visible = false
+	$DeathPop/DeathPop1.position.x = $DeathPop.position.x
+	$DeathPop/DeathPop1.position.y = $DeathPop.position.y
+	$DeathPop/DeathPop2.position.x = $DeathPop.position.x
+	$DeathPop/DeathPop2.position.y = $DeathPop.position.y
+	$DeathPop/DeathPop3.position.x = $DeathPop.position.x
+	$DeathPop/DeathPop3.position.y = $DeathPop.position.y
+	$DeathPop/DeathPop4.position.x = $DeathPop.position.x
+	$DeathPop/DeathPop4.position.y = $DeathPop.position.y
+	$DeathPop/DeathPop5.position.x = $DeathPop.position.x
+	$DeathPop/DeathPop5.position.y = $DeathPop.position.y
+	$DeathPop/DeathPop6.position.x = $DeathPop.position.x
+	$DeathPop/DeathPop6.position.y = $DeathPop.position.y
+	$DeathPop/DeathPop7.position.x = $DeathPop.position.x
+	$DeathPop/DeathPop7.position.y = $DeathPop.position.y
+	$DeathPop/DeathPop8.position.x = $DeathPop.position.x
+	$DeathPop/DeathPop8.position.y = $DeathPop.position.y
+	
+	$DeathAnimationTimer.stop()
+	$NotificationLabel.text = "GAME OVER\n\nPress Space/Click to try again"
 	input_disabled = false

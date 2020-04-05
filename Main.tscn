@@ -1,24 +1,36 @@
-[gd_scene load_steps=9 format=2]
+[gd_scene load_steps=14 format=2]
 
 [ext_resource path="res://Main.gd" type="Script" id=1]
 [ext_resource path="res://Player.tscn" type="PackedScene" id=2]
 [ext_resource path="res://Barrier.tscn" type="PackedScene" id=3]
 [ext_resource path="res://fonts/retro.ttf" type="DynamicFontData" id=4]
+[ext_resource path="res://sprite/death-2.png" type="Texture" id=5]
+[ext_resource path="res://sprite/death-1.png" type="Texture" id=6]
+[ext_resource path="res://sounds/death.wav" type="AudioStream" id=7]
+[ext_resource path="res://sprite/death-3.png" type="Texture" id=8]
 
-[sub_resource type="RectangleShape2D" id=3]
+[sub_resource type="RectangleShape2D" id=1]
 extents = Vector2( 517.483, 23.5903 )
 
-[sub_resource type="DynamicFont" id=1]
+[sub_resource type="DynamicFont" id=2]
 size = 28
 font_data = ExtResource( 4 )
 
-[sub_resource type="DynamicFont" id=2]
+[sub_resource type="DynamicFont" id=3]
 size = 28
 font_data = ExtResource( 4 )
 
 [sub_resource type="DynamicFont" id=4]
 size = 28
 font_data = ExtResource( 4 )
+
+[sub_resource type="SpriteFrames" id=5]
+animations = [ {
+"frames": [ ExtResource( 6 ), ExtResource( 8 ), ExtResource( 5 ) ],
+"loop": true,
+"name": "default",
+"speed": 5.0
+} ]
 
 [node name="Game" type="Node"]
 script = ExtResource( 1 )
@@ -28,9 +40,17 @@ wait_time = 3.0
 one_shot = true
 
 [node name="GameOverTimer" type="Timer" parent="."]
+wait_time = 1.5
+one_shot = true
+
+[node name="DeathStartTimer" type="Timer" parent="."]
+wait_time = 0.01
+one_shot = true
+
+[node name="DeathAnimationTimer" type="Timer" parent="."]
+wait_time = 0.001
 
 [node name="Floor" type="Area2D" parent="."]
-editor/display_folded = true
 position = Vector2( -3.33081, 581.745 )
 
 [node name="Polygon2D" type="Polygon2D" parent="Floor"]
@@ -41,7 +61,7 @@ polygon = PoolVector2Array( 0, 0, 0, 53, 1024, 52.9999, 1024, 0 )
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Floor"]
 position = Vector2( 513.508, 23.0025 )
-shape = SubResource( 3 )
+shape = SubResource( 1 )
 
 [node name="Player" parent="." instance=ExtResource( 2 )]
 position = Vector2( 200, 300 )
@@ -57,29 +77,86 @@ margin_left = 16.5695
 margin_top = 17.3495
 margin_right = 166.569
 margin_bottom = 62.3495
-custom_fonts/font = SubResource( 1 )
+custom_fonts/font = SubResource( 2 )
 text = "Score:"
+__meta__ = {
+"_edit_use_anchors_": false
+}
 
 [node name="ScoreCounter" type="Label" parent="."]
 margin_left = 195.831
 margin_top = 16.6287
 margin_right = 235.831
 margin_bottom = 54.6287
-custom_fonts/font = SubResource( 2 )
+custom_fonts/font = SubResource( 3 )
 text = "0"
 align = 1
 
 [node name="NotificationLabel" type="Label" parent="."]
 anchor_right = 1.0
 anchor_bottom = 1.0
-margin_right = -58.0
+margin_left = 1.0
+margin_right = -57.0
 margin_bottom = -18.0
 rect_scale = Vector2( 1.05866, 1.07694 )
 custom_fonts/font = SubResource( 4 )
 align = 1
 valign = 1
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="DeathSound" type="AudioStreamPlayer" parent="."]
+stream = ExtResource( 7 )
+volume_db = -10.0
+
+[node name="DeathPop" type="Node2D" parent="."]
+position = Vector2( 88, -46 )
+scale = Vector2( 0.25, 0.25 )
+
+[node name="DeathPop1" type="AnimatedSprite" parent="DeathPop"]
+frames = SubResource( 5 )
+frame = 2
+playing = true
+
+[node name="DeathPop2" type="AnimatedSprite" parent="DeathPop"]
+frames = SubResource( 5 )
+frame = 1
+playing = true
+
+[node name="DeathPop3" type="AnimatedSprite" parent="DeathPop"]
+frames = SubResource( 5 )
+frame = 1
+playing = true
+
+[node name="DeathPop4" type="AnimatedSprite" parent="DeathPop"]
+frames = SubResource( 5 )
+frame = 1
+playing = true
+
+[node name="DeathPop5" type="AnimatedSprite" parent="DeathPop"]
+frames = SubResource( 5 )
+frame = 1
+playing = true
+
+[node name="DeathPop6" type="AnimatedSprite" parent="DeathPop"]
+frames = SubResource( 5 )
+frame = 1
+playing = true
+
+[node name="DeathPop7" type="AnimatedSprite" parent="DeathPop"]
+frames = SubResource( 5 )
+playing = true
+
+[node name="DeathPop8" type="AnimatedSprite" parent="DeathPop"]
+position = Vector2( 8, -4 )
+frames = SubResource( 5 )
+frame = 1
+playing = true
 [connection signal="timeout" from="BarrierTimer" to="." method="_on_BarrierTimer_timeout"]
-[connection signal="timeout" from="GameOverTimer" to="." method="enable_input"]
+[connection signal="timeout" from="GameOverTimer" to="." method="game_over_end"]
+[connection signal="timeout" from="DeathStartTimer" to="." method="die"]
+[connection signal="timeout" from="DeathAnimationTimer" to="." method="update_death_animation"]
 [connection signal="body_entered" from="Floor" to="." method="_on_floor_collision"]
 [connection signal="body_entered" from="BarrierUpper" to="." method="_on_barrier_collision"]
 [connection signal="body_entered" from="BarrierLower" to="." method="_on_barrier_collision"]
