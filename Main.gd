@@ -107,8 +107,6 @@ func start_game():
 	$Foreground/Foreground1.texture = load("res://sprite/foreground.png")
 	$Foreground/Foreground2.texture = load("res://sprite/foreground.png")
 	
-	$BackgroundMusic.play(0)
-	
 	$BarrierTimer.start()
 
 
@@ -119,8 +117,6 @@ func game_over():
 	$Player.disable_input = true
 	$Player.visible = false
 	$BarrierTimer.stop()
-	
-	$BackgroundMusic.stop()
 	
 	$DeathStartTimer.start();
 	$GameOverTimer.start();
