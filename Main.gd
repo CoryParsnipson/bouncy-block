@@ -6,12 +6,13 @@ export var barrier_wait_time_min = 1.5
 export var barrier_wait_time_max = 3
 export var barrier_gap_radius_min = 80
 export var barrier_gap_radius_max = 120
-export var barrier_min_buffer = 100
+export var barrier_min_buffer = 50
 export var barrier_max_buffer = 100
+export var foreground_speed = 20
 
 export var score = 0
 export var level = 0
-export var to_next_level = 1
+export var to_next_level = 10
 export var barrier_speed = 0
 export var barrier_offset_min = 0
 export var barrier_offset_max = 0
@@ -31,12 +32,23 @@ func _ready():
 	$BarrierUpper/AnimatedSprite.flip_h = true
 	
 	reset()
+	$NotificationLabel.text = "Press Space or\nClick to start"
 
 
 func _process(delta):
 	if !game_started and !input_disabled:
 		if Input.is_action_pressed("ui_accept") or Input.is_action_pressed("ui_select"):
 			start_game()
+			
+	if game_started:
+		$Foreground/Foreground1.position.x -= foreground_speed
+		$Foreground/Foreground2.position.x -= foreground_speed
+		
+		if $Foreground/Foreground1.position.x + $Foreground/Foreground1.texture.get_size().x <= 0:
+			$Foreground/Foreground1.position.x += bounds.size.x + $Foreground/Foreground1.texture.get_size().x
+			
+		if $Foreground/Foreground2.position.x + $Foreground/Foreground2.texture.get_size().x <= 0:
+			$Foreground/Foreground2.position.x += bounds.size.x + $Foreground/Foreground2.texture.get_size().x
 
 
 func _physics_process(delta):
@@ -91,6 +103,12 @@ func start_game():
 	$Player.disable_physics = false
 	$Player.disable_input = false
 	$Player.visible = true
+	
+	$Foreground/Foreground1.texture = load("res://sprite/foreground.png")
+	$Foreground/Foreground2.texture = load("res://sprite/foreground.png")
+	
+	$BackgroundMusic.play(0)
+	
 	$BarrierTimer.start()
 
 
@@ -102,12 +120,17 @@ func game_over():
 	$Player.visible = false
 	$BarrierTimer.stop()
 	
+	$BackgroundMusic.stop()
+	
 	$DeathStartTimer.start();
 	$GameOverTimer.start();
 
 
 func die():
 	$DeathSound.play(0)
+	
+	$Foreground/Foreground1.texture = load("res://sprite/foreground2.png")
+	$Foreground/Foreground2.texture = load("res://sprite/foreground2.png")
 	
 	# death animation
 	$DeathPop.visible = true
