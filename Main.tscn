@@ -168,37 +168,42 @@ scale = Vector2( 0.25, 0.25 )
 
 [node name="DeathPop1" type="AnimatedSprite" parent="DeathPop"]
 frames = SubResource( 7 )
-frame = 1
 playing = true
 
 [node name="DeathPop2" type="AnimatedSprite" parent="DeathPop"]
 frames = SubResource( 7 )
+frame = 2
 playing = true
 
 [node name="DeathPop3" type="AnimatedSprite" parent="DeathPop"]
 frames = SubResource( 7 )
+frame = 2
 playing = true
 
 [node name="DeathPop4" type="AnimatedSprite" parent="DeathPop"]
 frames = SubResource( 7 )
+frame = 2
 playing = true
 
 [node name="DeathPop5" type="AnimatedSprite" parent="DeathPop"]
 frames = SubResource( 7 )
+frame = 2
 playing = true
 
 [node name="DeathPop6" type="AnimatedSprite" parent="DeathPop"]
 frames = SubResource( 7 )
+frame = 2
 playing = true
 
 [node name="DeathPop7" type="AnimatedSprite" parent="DeathPop"]
 frames = SubResource( 7 )
-frame = 2
+frame = 1
 playing = true
 
 [node name="DeathPop8" type="AnimatedSprite" parent="DeathPop"]
 position = Vector2( 8, -4 )
 frames = SubResource( 7 )
+frame = 2
 playing = true
 [connection signal="timeout" from="BarrierTimer" to="." method="_on_BarrierTimer_timeout"]
 [connection signal="timeout" from="GameOverTimer" to="." method="game_over_end"]

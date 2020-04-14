@@ -12,7 +12,7 @@ export var foreground_speed = 20
 
 export var score = 0
 export var level = 0
-export var to_next_level = 10
+export var to_next_level = 3
 export var barrier_speed = 0
 export var barrier_offset_min = 0
 export var barrier_offset_max = 0
