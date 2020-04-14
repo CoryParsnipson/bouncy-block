@@ -22,6 +22,8 @@ var bounds
 var input_disabled = false
 var game_started = false
 var previous_barrier_pos_x
+var muted = false
+var music_position = 0
 
 var active_barriers = Array()
 
@@ -31,14 +33,33 @@ func _ready():
 	# make the upper barrier sprite mirrored to align the face
 	$BarrierUpper/AnimatedSprite.flip_h = true
 	
+	# hook up mute button
+	$VolumeControl/Area2D.connect("toggleMusic", self, "toggle_music")
+	
 	reset()
 	$NotificationLabel.text = "Press Space or\nClick to start"
-
+	
+	
+func toggle_music():
+		if muted:
+			$VolumeControl.texture = load("res://sprite/notification-audio-volume-high-icon.png")
+			$BackgroundMusic.play()
+			$BackgroundMusic.seek(music_position)
+			muted = false
+		else:
+			$VolumeControl.texture = load("res://sprite/notification-audio-volume-low-icon.png")
+			music_position = $BackgroundMusic.get_playback_position()
+			$BackgroundMusic.stop()
+			muted = true
+			
 
 func _process(delta):
 	if !game_started and !input_disabled:
 		if Input.is_action_pressed("ui_accept") or Input.is_action_pressed("ui_select"):
 			start_game()
+		
+	if Input.is_action_just_pressed("toggle_sound"):
+		toggle_music()
 			
 	if game_started:
 		$Foreground/Foreground1.position.x -= foreground_speed
@@ -107,6 +128,9 @@ func start_game():
 	$Foreground/Foreground1.texture = load("res://sprite/foreground.png")
 	$Foreground/Foreground2.texture = load("res://sprite/foreground.png")
 	
+	if !muted:
+		$BackgroundMusic.play(0)
+	
 	$BarrierTimer.start()
 
 
@@ -117,6 +141,9 @@ func game_over():
 	$Player.disable_input = true
 	$Player.visible = false
 	$BarrierTimer.stop()
+	
+	if !muted:
+		$BackgroundMusic.stop()
 	
 	$DeathStartTimer.start();
 	$GameOverTimer.start();
