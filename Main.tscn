@@ -1,4 +1,4 @@
-[gd_scene load_steps=20 format=2]
+[gd_scene load_steps=21 format=2]
 
 [ext_resource path="res://Main.gd" type="Script" id=1]
 [ext_resource path="res://Player.tscn" type="PackedScene" id=2]
@@ -29,10 +29,14 @@ font_data = ExtResource( 4 )
 size = 28
 font_data = ExtResource( 4 )
 
-[sub_resource type="RectangleShape2D" id=5]
+[sub_resource type="DynamicFont" id=5]
+size = 14
+font_data = ExtResource( 4 )
+
+[sub_resource type="RectangleShape2D" id=6]
 extents = Vector2( 406.025, 373.992 )
 
-[sub_resource type="SpriteFrames" id=6]
+[sub_resource type="SpriteFrames" id=7]
 animations = [ {
 "frames": [ ExtResource( 6 ), ExtResource( 8 ), ExtResource( 5 ) ],
 "loop": true,
@@ -130,8 +134,21 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
+[node name="VolumeLabel" type="Label" parent="."]
+margin_left = 4.4491
+margin_top = 46.6001
+margin_right = 248.449
+margin_bottom = 76.6001
+custom_fonts/font = SubResource( 5 )
+text = "Toggle music with 's'"
+align = 1
+valign = 1
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
 [node name="VolumeControl" type="Sprite" parent="."]
-position = Vector2( 35.1056, 86.0528 )
+position = Vector2( 35.1056, 94.0528 )
 scale = Vector2( 0.0585918, 0.0585918 )
 texture = ExtResource( 12 )
 
@@ -139,7 +156,7 @@ texture = ExtResource( 12 )
 script = ExtResource( 13 )
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="VolumeControl/Area2D"]
-shape = SubResource( 5 )
+shape = SubResource( 6 )
 
 [node name="DeathSound" type="AudioStreamPlayer" parent="."]
 stream = ExtResource( 7 )
@@ -150,38 +167,38 @@ position = Vector2( 88, -46 )
 scale = Vector2( 0.25, 0.25 )
 
 [node name="DeathPop1" type="AnimatedSprite" parent="DeathPop"]
-frames = SubResource( 6 )
+frames = SubResource( 7 )
 frame = 1
 playing = true
 
 [node name="DeathPop2" type="AnimatedSprite" parent="DeathPop"]
-frames = SubResource( 6 )
+frames = SubResource( 7 )
 playing = true
 
 [node name="DeathPop3" type="AnimatedSprite" parent="DeathPop"]
-frames = SubResource( 6 )
+frames = SubResource( 7 )
 playing = true
 
 [node name="DeathPop4" type="AnimatedSprite" parent="DeathPop"]
-frames = SubResource( 6 )
+frames = SubResource( 7 )
 playing = true
 
 [node name="DeathPop5" type="AnimatedSprite" parent="DeathPop"]
-frames = SubResource( 6 )
+frames = SubResource( 7 )
 playing = true
 
 [node name="DeathPop6" type="AnimatedSprite" parent="DeathPop"]
-frames = SubResource( 6 )
+frames = SubResource( 7 )
 playing = true
 
 [node name="DeathPop7" type="AnimatedSprite" parent="DeathPop"]
-frames = SubResource( 6 )
+frames = SubResource( 7 )
 frame = 2
 playing = true
 
 [node name="DeathPop8" type="AnimatedSprite" parent="DeathPop"]
 position = Vector2( 8, -4 )
-frames = SubResource( 6 )
+frames = SubResource( 7 )
 playing = true
 [connection signal="timeout" from="BarrierTimer" to="." method="_on_BarrierTimer_timeout"]
 [connection signal="timeout" from="GameOverTimer" to="." method="game_over_end"]
